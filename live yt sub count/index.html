@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>YouTube Channel Live Sub Count</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+</head>
+<body>
+  <h1>YouTube Channel Live Sub Count</h1>
+  <l>Click to get redirected to your channel</l>
+  <div class="spacer"></div>
+  <x><a href="https://www.youtube.com/user" target="_blank"><i class="fab fa-youtube"></i></a></x>
+  <div class="spacer"></div>
+  <label for="channelUrl">Enter YouTube Channel URL:</label>
+  <div class="spacer"></div>
+  <input type="text" id="channelUrl" placeholder="https://www.youtube.com/channel/...">
+  <button onclick="convertToChannelID()">Convert</button>
+  <p>Channel ID: <span id="channelID"></span></p>
+  <p>Channel Name: <span id="channelName"></span></p>
+  <p>Subscriber Count: <span id="subscriberCount"></span></p>
+
+  <script>
+    const API_KEY = 'Paste youtube api key here';
+    let CHANNEL_ID = '';
+
+    function convertToChannelID() {
+      const channelUrlInput = document.getElementById('channelUrl');
+      const channelUrl = channelUrlInput.value.trim();
+
+      // Check if the input is a valid YouTube channel URL
+      const regex = /^https?:\/\/(?:www\.)?youtube\.com\/(?:c\/|channel\/)?([^\/\?]+)/i;
+      const match = channelUrl.match(regex);
+      
+      if (!match) {
+        alert('Invalid YouTube channel URL. Please enter a valid URL.');
+        return;
+      }
+
+      CHANNEL_ID = match[1];
+      document.getElementById('channelID').textContent = CHANNEL_ID;
+
+      // Fetch the channel name and live subscriber count
+      getChannelData();
+    }
+
+    function getChannelData() {
+      fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=${CHANNEL_ID}&key=${API_KEY}`)
+        .then(response => response.json())
+        .then(data => {
+          const channelName = data.items[0].snippet.title;
+          const subscriberCount = data.items[0].statistics.subscriberCount;
+          document.getElementById('channelName').textContent = channelName;
+          document.getElementById('subscriberCount').textContent = subscriberCount;
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+    }
+  </script>
+</body>
+</html>
