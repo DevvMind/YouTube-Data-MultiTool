@@ -1,4 +1,4 @@
-const API_KEY = 'AIzaSyA6DJD3MgPw-exPLDnjh7H_CgEl_yIke5k';
+const API_KEY = 'INSERT API KEY HERE';
 let CHANNEL_ID = '';
 const REFRESH_RATE_MS = 5000; // Refresh rate in milliseconds (5 seconds in this example)
 
